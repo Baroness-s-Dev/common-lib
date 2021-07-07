@@ -6,7 +6,7 @@
 
     <groupId>ru.baronessdev.lib.common</groupId>
     <artifactId>common</artifactId>
-    <version>1.0</version>
+    <version>1</version>
     <packaging>jar</packaging>
 
     <name>Common</name>
@@ -38,6 +38,17 @@
             <version>4.5.13</version>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>spigotmc-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>sonatype</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>
