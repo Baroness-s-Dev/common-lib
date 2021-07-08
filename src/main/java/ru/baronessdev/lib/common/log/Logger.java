@@ -14,15 +14,17 @@ public class Logger {
     private final ChatColor ERROR_TEXT_COLOR;
     private final String ERROR_LABEL;
 
+    private final ChatColor PREFIX_COLOR;
     private final String PREFIX;
 
-    public Logger(ChatColor info_color, ChatColor info_text_color, String info_label, ChatColor error_color, ChatColor error_text_color, String error_label, String prefix) {
+    public Logger(ChatColor info_color, ChatColor info_text_color, String info_label, ChatColor error_color, ChatColor error_text_color, String error_label, ChatColor prefix_color, String prefix) {
         INFO_PREFIX_COLOR = info_color;
         INFO_TEXT_COLOR = info_text_color;
         INFO_LABEL = info_label;
         ERROR_PREFIX_COLOR = error_color;
         ERROR_TEXT_COLOR = error_text_color;
         ERROR_LABEL = error_label;
+        PREFIX_COLOR = prefix_color;
         PREFIX = prefix;
     }
 
@@ -33,9 +35,9 @@ public class Logger {
     private String getPrefix(LogLevel type) {
         switch (type) {
             case INFO:
-                return PREFIX + INFO_PREFIX_COLOR + INFO_LABEL + " " + INFO_TEXT_COLOR;
+                return PREFIX_COLOR + PREFIX + " " + INFO_PREFIX_COLOR + INFO_LABEL + " " + INFO_TEXT_COLOR;
             case ERROR:
-                return PREFIX + ERROR_PREFIX_COLOR + ERROR_LABEL + " " + ERROR_TEXT_COLOR;
+                return PREFIX_COLOR + PREFIX + " " + ERROR_PREFIX_COLOR + ERROR_LABEL + " " + ERROR_TEXT_COLOR;
             default:
                 return "";
         }
@@ -51,6 +53,7 @@ public class Logger {
         private ChatColor ERROR_TEXT_COLOR = ChatColor.RED;
         private String ERROR_LABEL = "[ERROR]";
 
+        private ChatColor PREFIX_COLOR = ChatColor.GOLD;
         private final String PREFIX;
 
         public Builder(@NotNull String prefix) {
@@ -87,6 +90,10 @@ public class Logger {
             return this;
         }
 
+        public void setPrefixColor(ChatColor PREFIX_COLOR) {
+            this.PREFIX_COLOR = PREFIX_COLOR;
+        }
+
         public Logger build() {
             return new Logger(
                     INFO_PREFIX_COLOR,
@@ -95,6 +102,7 @@ public class Logger {
                     ERROR_PREFIX_COLOR,
                     ERROR_TEXT_COLOR,
                     ERROR_LABEL,
+                    PREFIX_COLOR,
                     PREFIX
             );
         }
