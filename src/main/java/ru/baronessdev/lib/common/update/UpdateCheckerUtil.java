@@ -8,11 +8,22 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import ru.baronessdev.lib.common.log.LogLevel;
 import ru.baronessdev.lib.common.log.Logger;
+import ru.baronessdev.lib.common.util.ThreadUtil;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 
 @SuppressWarnings("unused")
 public class UpdateCheckerUtil {
+
+    public static void checkAsynchronously(@NotNull JavaPlugin plugin, @NotNull String url, @NotNull Logger logger, Consumer<Integer> task) {
+        ThreadUtil.runAsyncThread(() -> {
+            try {
+                check(plugin, url, logger);
+            } catch (UpdateCheckException ignored) {
+            }
+        });
+    }
 
     public static int check(@NotNull JavaPlugin plugin, @NotNull String url, Logger logger) throws UpdateCheckException {
         if (logger != null) {
