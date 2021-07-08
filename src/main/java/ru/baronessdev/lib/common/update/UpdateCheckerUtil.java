@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 @SuppressWarnings("unused")
 public class UpdateCheckerUtil {
 
-    public static void checkAsynchronously(@NotNull JavaPlugin plugin, @NotNull String url, @NotNull Logger logger, Consumer<Integer> task) {
+    public static void checkAsynchronously(@NotNull JavaPlugin plugin, @NotNull String url, @NotNull Logger logger) {
         ThreadUtil.runAsyncThread(() -> {
             try {
                 check(plugin, url, logger);
