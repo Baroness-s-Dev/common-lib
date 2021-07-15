@@ -25,6 +25,19 @@ public class UpdateCheckerUtil {
         });
     }
 
+    public static void checkAsynchronously(@NotNull String url, Consumer<Integer> acceptConsumer, Consumer<UpdateCheckException> exceptionConsumer) {
+        ThreadUtil.runAsyncThread(() -> {
+            int i = -1;
+            try {
+                i = getLatest( url);
+            } catch (UpdateCheckException e) {
+                exceptionConsumer.accept(e);
+            } finally {
+                acceptConsumer.accept(i);
+            }
+        });
+    }
+
     public static int check(@NotNull JavaPlugin plugin, @NotNull String url, Logger logger) throws UpdateCheckException {
         if (logger != null) {
             return checkWithLogger(plugin, url, logger);
@@ -43,14 +56,22 @@ public class UpdateCheckerUtil {
         try {
             i = UpdateCheckerUtil.check(plugin, url, null);
             if (i != -1) {
-                logger.log(LogLevel.INFO, "New version found: v" + ChatColor.YELLOW + i + ChatColor.GRAY + " (Current: v" + plugin.getDescription().getVersion() + ")");
-                logger.log(LogLevel.INFO, "Update now: " + ChatColor.AQUA + "market.baronessdev.ru");
+                logDefaultUpdate(logger, plugin, i);
             }
         } catch (UpdateCheckException e) {
-            logger.log(LogLevel.ERROR, "Could not check for updates: " + e.getRootCause());
-            logger.log(LogLevel.ERROR, "Please contact Baroness's Dev if this isn't your mistake.");
+            logDefaultExceptionError(logger, e);
         }
         return i;
+    }
+
+    public static void logDefaultUpdate(Logger logger, JavaPlugin plugin, int i) {
+        logger.log(LogLevel.INFO, "New version found: v" + ChatColor.YELLOW + i + ChatColor.GRAY + " (Current: v" + plugin.getDescription().getVersion() + ")");
+        logger.log(LogLevel.INFO, "Update now: " + ChatColor.AQUA + "market.baronessdev.ru");
+    }
+
+    public static void logDefaultExceptionError(Logger logger, UpdateCheckException e) {
+        logger.log(LogLevel.ERROR, "Could not check for updates: " + e.getRootCause());
+        logger.log(LogLevel.ERROR, "Please contact Baroness's Dev if this isn't your mistake.");
     }
 
     private static int getLatest(String url) throws UpdateCheckException {
@@ -71,5 +92,17 @@ public class UpdateCheckerUtil {
         }
 
         return version;
+    }
+
+    public static @NotNull UpdateType getUpdateType(@NotNull JavaPlugin plugin, int currentVersion, int latestVersion) {
+        if (latestVersion == -1) return UpdateType.FAILED;
+        if (currentVersion < latestVersion) return UpdateType.AVAILABLE;
+        return UpdateType.UNAVAILABLE;
+    }
+
+    public enum UpdateType {
+        AVAILABLE,
+        UNAVAILABLE,
+        FAILED
     }
 }

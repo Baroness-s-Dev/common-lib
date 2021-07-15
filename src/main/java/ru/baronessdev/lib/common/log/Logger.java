@@ -70,7 +70,7 @@ public class Logger {
             return this;
         }
 
-        public Builder setINFO_LABEL(@NotNull String INFO_LABEL) {
+        public Builder setInfoLabel(@NotNull String INFO_LABEL) {
             this.INFO_LABEL = INFO_LABEL;
             return this;
         }
