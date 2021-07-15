@@ -14,6 +14,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
+        <optimization-passes>100000</optimization-passes>
     </properties>
 
     <dependencies>
@@ -89,14 +90,78 @@
                         <!-- ACF !-->
                         <relocation>
                             <pattern>co.aikar.commands</pattern>
-                            <shadedPattern>${groupId}.acf.core</shadedPattern>
+                            <shadedPattern>${project.groupId}.acf.core</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>co.aikar.locales</pattern>
-                            <shadedPattern>${groupId}.acf.locales</shadedPattern>
+                            <shadedPattern>${project.groupId}.acf.locales</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.wvengen</groupId>
+                <artifactId>proguard-maven-plugin</artifactId>
+                <version>2.3.1</version>
+                <executions>
+                    <execution>
+                        <id>obfuscation-packaging</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>proguard</goal>
+                        </goals>
+                        <configuration>
+                            <proguardVersion>6.2.2</proguardVersion>
+                            <obfuscate>true</obfuscate>
+                            <attach>true</attach>
+                            <appendClassifier>false</appendClassifier>
+                            <addMavenDescriptor>true</addMavenDescriptor>
+                            <injar>${project.build.finalName}.jar</injar>
+                            <injarNotExistsSkip>true</injarNotExistsSkip>
+
+                            <libs>
+                                <lib>/usr/lib/jvm/java-8-openjdk/jre/lib/rt.jar</lib>
+                            </libs>
+
+                            <options>
+                                <!-- base settings !-->
+                                <option>
+                                    -optimizationpasses ${optimization-passes}
+                                </option>
+                                <option>
+                                    -dontobfuscate
+                                </option>
+                                <option>
+                                    -allowaccessmodification
+                                </option>
+                                <option>
+                                    -mergeinterfacesaggressively
+                                </option>
+                                <option>
+                                    -dontnote
+                                </option>
+                                <option>
+                                    -dontwarn
+                                </option>
+                                <option>
+                                    -ignorewarnings
+                                </option>
+
+                                <!-- own project !-->
+                                <option>
+                                    -keep class ru.baronessdev.lib.common.** { *; }
+                                </option>
+                            </options>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sf.proguard</groupId>
+                        <artifactId>proguard-base</artifactId>
+                        <version>6.2.2</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
         <resources>
