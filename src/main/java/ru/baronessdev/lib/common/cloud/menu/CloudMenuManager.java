@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 public class CloudMenuManager {
 
@@ -42,9 +41,12 @@ public class CloudMenuManager {
 
         keys.clear();
 
-        List<Index> indexList = rawIndexList.stream().filter(index ->
-                index.getDepends().stream().allMatch(dependPlugin -> Bukkit.getPluginManager().getPlugin(dependPlugin) != null))
-                .collect(Collectors.toList());
+        List<Index> indexList = new ArrayList<>();
+        for (Index rawIndex : rawIndexList) {
+            if (rawIndex.getDepends().stream().allMatch(dependPlugin -> Bukkit.getPluginManager().getPlugin(dependPlugin) != null)) {
+                indexList.add(rawIndex);
+            }
+        }
 
         int size = 9;
         while (pluginList.size() + indexList.size() + 1 > size) size = size + 9;
