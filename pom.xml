@@ -6,7 +6,7 @@
 
     <groupId>ru.baronessdev.lib.common</groupId>
     <artifactId>common</artifactId>
-    <version>TESTING</version>
+    <version>3</version>
     <packaging>jar</packaging>
 
     <name>Common</name>
