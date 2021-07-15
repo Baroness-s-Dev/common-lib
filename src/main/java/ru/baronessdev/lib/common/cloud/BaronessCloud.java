@@ -154,7 +154,7 @@ public class BaronessCloud {
     }
 
     private void buildMenu() {
-        CloudMenuManager.build(pluginList, indexList, config);
+        CloudMenuManager.build(new ArrayList<>(pluginList), new ArrayList<>(indexList), config);
     }
 
     private boolean isDisabled() {
