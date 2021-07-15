@@ -120,7 +120,7 @@
                             <injarNotExistsSkip>true</injarNotExistsSkip>
 
                             <libs>
-                                <lib>/usr/lib/jvm/java-8-openjdk/jre/lib/rt.jar</lib>
+                                <lib>${java.home}/lib/rt.jar</lib>
                             </libs>
 
                             <options>
